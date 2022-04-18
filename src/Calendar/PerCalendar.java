@@ -58,8 +58,10 @@ public class PerCalendar {
         //设置文本域内容
         list.setText(ss);
         list.setEditable(false);
+        //以下三个addKeyListener分别对年月日的三个输入框进行了限制，限制其只能输入数字。
         field1.addKeyListener(new KeyAdapter() {
             @Override
+
             public void keyTyped(KeyEvent e) {
                 super.keyTyped(e);
                 int keychar=e.getKeyChar();
@@ -99,6 +101,7 @@ public class PerCalendar {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Calendar calendar=Calendar.getInstance();
+                //给年月日一个初始化数值
                 int year=calendar.get(Calendar.YEAR);
                 int month=calendar.get(Calendar.MONTH)+1;
                 int day=calendar.get(Calendar.DATE);
@@ -127,9 +130,11 @@ public class PerCalendar {
         });
     }
     public  static String date(int year,int month,int day){
+        //判断输入的日是否合法
         if(day>=1&&day<=31){
 
         }else{
+            //如果不合法,则看其月份，如果为2月,则修改其日为28号,其他月份则修改日为30，避免后台发生错误.
             if(month==2){
                 day=28;
             }else {
@@ -146,8 +151,11 @@ public class PerCalendar {
         calendar.add(Calendar.DAY_OF_MONTH,-1);
         //获取这个月的总天数
         int days=calendar.get(Calendar.DAY_OF_MONTH);
+        //创建一个StringBuilder,来对文本进行存储
         StringBuilder ss= new StringBuilder();
+        //打印日历的表头
         ss.append("星期日\t星期一\t星期二\t星期三\t星期四\t星期五\t星期六\t");
+        //文本换行
         ss.append("\n");
         //输入日期
         int count=0;
@@ -156,20 +164,24 @@ public class PerCalendar {
             count++;
         }
         for(int i =1;i<=days;i++){
+            //为了使得日期能够对其，当天数大于9以后，则变成2位数，将其进行对齐
             if(i<10){
                 if(i==day){
+                    //将跳转日期进行特殊‘*’标记,方便辨别
                     ss.append(" " + "*").append(i).append("\t");
                 }else {
                     ss.append(" ").append(i).append("\t");
                 }
             }else {
                 if(i==day){
+                    //将跳转日期进行特殊‘*’标记,方便辨别
                     ss.append("*").append(i).append("\t");
                 }else {
                     ss.append(+i).append("\t");
                 }
             }
             count++;
+            //如果够一个星期，进行换行
             if(count%7==0){
                 ss.append("\n");
             }
@@ -178,14 +190,18 @@ public class PerCalendar {
     }
     public static void main(String[] args){
         Calendar calendar =Calendar.getInstance();
+        //获取当前日期的年月日
         int year= calendar.get(Calendar.YEAR);
+        //因为获取到的月份比实际少一，每年的一月对应数字为0，则进行+1处理
         int month=calendar.get(Calendar.MONTH)+1;
         int day=calendar.get(Calendar.DATE);
         String s=date(year,month,day);
         JFrame jf=new JFrame();
         jf.setLayout(null);
+        //设置大小为700*300
         jf.setSize(700,300);
         jf.setVisible(true);
+        //为关闭窗口的关闭绑定事件
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         menu(jf,s,year,month,day);
     }
